@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Números Virtuais Br</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        escuro: '#080808',
+                        vidro: 'rgba(15, 15, 15, 0.55)',
+                        verdeNeon: '#00FF66',
+                    },
+                    boxShadow: {
+                        brilhoVerde: '0 0 18px #00FF66, 0 0 35px rgba(0,255,102,0.3)',
+                        brilhoCromatico: '0 0 25px #00FF66, 0 0 50px #00CCFF, 0 0 75px #9933FF, 0 0 100px #FF00CC',
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .textoBrilho { 
+                text-shadow: 0 0 10px #00FF66, 0 0 20px rgba(0,255,102,0.5); 
+            }
+            .fundoAnimado { 
+                background-size: 400% 400%; 
+                animation: gradienteCores 12s ease infinite; 
+            }
+            .bordaMagica { 
+                position: relative; 
+            }
+            .bordaMagica::before {
+                content: ''; 
+                position: absolute; 
+                inset: -3px;
+                background: linear-gradient(45deg, #00ff66, #00ccff, #9933ff, #ff00cc, #00ff66);
+                background-size: 400% 400%; 
+                animation: gradienteCores 6s linear infinite;
+                border-radius: 1rem; 
+                z-index: -1;
+            }
+            @keyframes gradienteCores {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+            .vidroFosco { 
+                backdrop-filter: blur(16px) saturate(180%); 
+            }
+            .esconder {
+                display: none !important;
+            }
+            .mensagem {
+                transition: all 0.3s ease;
+            }
+        }
+    </style>
+</head>
+<body class="bg-escuro min-h-screen flex items-center justify-center overflow-hidden">
+
+    <!-- FUNDO CROMÁTÁTICO ANIMADO -->
+    <div class="fixed inset-0 fundoAnimado opacity-15 z-0" style="background-image: linear-gradient(45deg, #00ff66, #00ccff, #9933ff, #ff00cc); filter: blur(70px);"></div>
+
+    <!-- CONTAINER PRINCIPAL -->
+    <div class="w-full max-w-md p-5 relative z-10" id="containerLogin">
+        <div class="bordaMagica rounded-2xl">
+            <div class="bg-vidro vidroFosco p-9 rounded-2xl border border-verdeNeon/20">
+                
+                <!-- MENSAGEM DE AVISO -->
+                <div id="aviso" class="mensagem hidden bg-verdeNeon/20 border border-verdeNeon text-verdeNeon px-4 py-2 rounded-lg mb-6 text-sm text-center"></div>
+
+                <!-- TELA DE LOGIN -->
+                <div id="telaLogin">
+                    <div class="text-center mb-9">
+                        <h1 class="text-[clamp(2rem,4vw,2.8rem)] font-black text-verdeNeon textoBrilho mb-2">MEU SITE</h1>
+                        <p class="text-gray-400 text-sm">Acesse sua conta exclusiva</p>
+                    </div>
+
+                    <form onsubmit="fazerLogin(event)" class="space-y-5">
+                        <div>
+                            <label class="block text-gray-300 mb-2 text-sm font-medium">E-mail</label>
+                            <input type="email" id="loginEmail" required class="w-full px-4 py-3.5 rounded-lg bg-escuro/70 border border-verdeNeon/30 focus:border-verdeNeon focus:outline-none focus:shadow-brilhoVerde transition-all duration-300 text-white">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2 text-sm font-medium">Senha</label>
+                            <input type="password" id="loginSenha" required class="w-full px-4 py-3.5 rounded-lg bg-escuro/70 border border-verdeNeon/30 focus:border-verdeNeon focus:outline-none focus:shadow-brilhoVerde transition-all duration-300 text-white">
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-verdeNeon hover:bg-verdeNeon/90 text-black font-bold py-3.5 rounded-lg shadow-brilhoVerde hover:shadow-brilhoCromatico transition-all duration-300 transform hover:scale-[1.03] active:scale-[0.98]">
+                            <i class="fa fa-sign-in mr-2"></i> Entrar
+                        </button>
+                    </form>
+
+                    <div class="relative my-7">
+                        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-700/70"></div></div>
+                        <div class="relative flex justify-center text-xs uppercase"><span class="bg-vidro px-3 text-gray-500">ou continue com</span></div>
+                    </div>
+
+                    <button onclick="loginGoogle()" class="w-full bg-white/10 hover:bg-white/20 text-white py-3.5 rounded-lg border border-white/20 transition-all duration-300 flex items-center justify-center gap-3 hover:shadow-lg">
+                        <i class="fa fa-google text-red-500 text-lg"></i>
+                        <span class="font-medium">Google</span>
+                    </button>
+
+                    <p class="text-center text-gray-400 text-sm mt-7">
+                        Não tem conta? <a href="#" onclick="mostrarCadastro()" class="text-verdeNeon hover:underline font-medium textoBrilho">Criar conta agora</a>
+                    </p>
+                </div>
+
+                <!-- TELA DE CADASTRO -->
+                <div id="telaCadastro" class="esconder">
+                    <div class="text-center mb-9">
+                        <h1 class="text-2xl font-black text-verdeNeon textoBrilho mb-2">📝 CRIAR CONTA</h1>
+                        <p class="text-gray-400 text-sm">Preencha seus dados corretamente</p>
+                    </div>
+
+                    <form onsubmit="fazerCadastro(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-gray-300 mb-2 text-sm font-medium">Nome Completo</label>
+                            <input type="text" id="cadNome" required class="w-full px-4 py-3.5 rounded-lg bg-escuro/70 border border-verdeNeon/30 focus:border-verdeNeon focus:outline-none focus:shadow-brilhoVerde transition-all text-white">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2 text-sm font-medium">Seu E-mail</label>
+                            <input type="email" id="cadEmail" required class="w-full px-4 py-3.5 rounded-lg bg-escuro/70 border border-verdeNeon/30 focus:border-verdeNeon focus:outline-none focus:shadow-brilhoVerde transition-all text-white">
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 mb-2 text-sm font-medium">Criar Senha</label>
+                            <input type="password" id="cadSenha" required class="w-full px-4 py-3.5 rounded-lg bg-escuro/70 border border-verdeNeon/30 focus:border-verdeNeon focus:outline-none focus:shadow-brilhoVerde transition-all text-white">
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-verdeNeon hover:bg-verdeNeon/90 text-black font-bold py-3.5 rounded-lg shadow-brilhoVerde hover:shadow-brilhoCromatico transition-all duration-300 transform hover:scale-[1.03] mt-2">
+                            <i class="fa fa-paper-plane mr-2"></i> Cadastrar
+                        </button>
+                    </form>
+
+                    <p class="text-center text-gray-400 text-sm mt-7">
+                        Já tem conta? <a href="#" onclick="mostrarLogin()" class="text-verdeNeon hover:underline textoBrilho">Voltar para login</a>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- PAINEL PRINCIPAL (SÓ APARECE QUANDO LOGADO) -->
+    <div id="painelPrincipal" class="esconder w-full min-h-screen relative z-10">
+        <header class="p-5 border-b border-verdeNeon/20 bg-vidro vidroFosco">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-2xl font-black text-verdeNeon textoBrilho">MEU SITE</h1>
+                <div class="flex items-center gap-4">
+                    <span class="text-gray-300" id="nomeUsuario">Bem-vindo, Usuário</span>
+                    <a href="#" onclick="sair()" class="text-red-400 hover:text-red-300 text-xl"><i class="fa fa-sign-out"></i></a>
+                </div>
+            </div>
+        </header>
+
+        <main class="container mx-auto p-8">
+            <div class="bordaMagica rounded-xl max-w-2xl mx-auto">
+                <div class="bg-vidro vidroFosco p-10 rounded-xl border border-verdeNeon/20 text-center">
+                    <h2 class="text-4xl text-verdeNeon font-bold mb-5 textoBrilho">🚀 ÁREA EXCLUSIVA</h2>
+                    <p class="text-gray-300 text-lg mb-8">Aqui está seu painel, só você consegue ver este conteúdo!</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="bg-escuro/80 p-6 rounded-lg border border-verdeNeon/30 hover:shadow-brilhoVerde transition-all">
+                            <i class="fa fa-user-circle text-verdeNeon text-4xl mb-3"></i>
+                            <h3 class="text-white font-semibold">Meu Perfil</h3>
+                        </div>
+                        <div class="bg-escuro/80 p-6 rounded-lg border border-verdeNeon/30 hover:shadow-brilhoVerde transition-all">
+                            <i class="fa fa-cog text-verdeNeon text-4xl mb-3"></i>
+                            <h3 class="text-white font-semibold">Configurações</h3>
+                        </div>
+                        <div class="bg-escuro/80 p-6 rounded-lg border border-verdeNeon/30 hover:shadow-brilhoVerde transition-all">
+                            <i class="fa fa-bar-chart text-verdeNeon text-4xl mb-3"></i>
+                            <h3 class="text-white font-semibold">Estatísticas</h3>
+                        </div>
+                        <div class="bg-escuro/80 p-6 rounded-lg border border-verdeNeon/30 hover:shadow-brilhoVerde transition-all">
+                            <i class="fa fa-envelope text-verdeNeon text-4xl mb-3"></i>
+                            <h3 class="text-white font-semibold">Mensagens</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Banco de dados local (salva no navegador)
+        let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+        let usuarioLogado = JSON.parse(localStorage.getItem('logado')) || null;
+
+        // Verifica se já está logado ao carregar
+        window.onload = () => {
+            if(usuarioLogado) mostrarPainel();
+        };
+
+        // Alternar telas
+        function mostrarCadastro() {
+            document.getElementById('telaLogin').classList.add('esconder');
+            document.getElementById('telaCadastro').classList.remove('esconder');
+            esconderAviso();
+        }
+        function mostrarLogin() {
+            document.getElementById('telaCadastro').classList.add('esconder');
+            document.getElementById('telaLogin').classList.remove('esconder');
+            esconderAviso();
+        }
+        function mostrarPainel() {
+            document.getElementById('containerLogin').classList.add('esconder');
+            document.getElementById('painelPrincipal').classList.remove('esconder');
+            if(usuarioLogado) document.getElementById('nomeUsuario').innerText = `Bem-vindo, ${usuarioLogado.nome}`;
+        }
+
+        // Sistema de Cadastro
+        function fazerCadastro(e) {
+            e.preventDefault();
+            const nome = document.getElementById('cadNome').value;
+            const email = document.getElementById('cadEmail').value;
+            const senha = document.getElementById('cadSenha').value;
+
+            // Verifica se email já existe
+            if(usuarios.find(u => u.email === email)) {
+                mostrarAviso('❌ Este e-mail já está cadastrado!', 'vermelho');
+                return;
+            }
+
+            // Adiciona usuário
+            usuarios.push({ nome, email, senha, ativo: true });
+            salvarDados();
+            mostrarAviso('✅ Cadastrado com sucesso! Faça login.', 'verde');
+            mostrarLogin();
+            
+            // Limpa campos
+            document.getElementById('cadNome').value = '';
+            document.getElementById('cadEmail').value = '';
+            document.getElementById('cadSenha').value = '';
+        }
+
+        // Sistema de Login
+        function fazerLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const senha = document.getElementById('loginSenha').value;
+
+            const usuario = usuarios.find(u => u.email === email && u.senha === senha);
+            
+            if(!usuario) {
+                mostrarAviso('❌ E-mail ou senha incorretos!', 'vermelho');
+                return;
+            }
+
+            usuarioLogado = usuario;
+            localStorage.setItem('logado', JSON.stringify(usuario));
+            mostrarPainel();
+        }
+
+        // Login com Google (Simulação visual pronta)
+        function loginGoogle() {
+            mostrarAviso('🔄 Redirecionando para autenticação Google...', 'verde');
+            // Aqui você pode integrar a API real do Google futuramente
+        }
+
+        // Sair
+        function sair() {
+            usuarioLogado = null;
+            localStorage.removeItem('logado');
+            mostrarLogin();
+            document.getElementById('painelPrincipal').classList.add('esconder');
+            document.getElementById('containerLogin').classList.remove('esconder');
+        }
+
+        // Funções auxiliares
+        function salvarDados() {
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+        }
+        function mostrarAviso(texto, cor) {
+            const aviso = document.getElementById('aviso');
+            aviso.innerText = texto;
+            aviso.classList.remove('esconder');
+            aviso.classList.remove('bg-red-400/20', 'text-red-400', 'border-red-400', 'bg-verdeNeon/20', 'text-verdeNeon', 'border-verdeNeon');
+            if(cor === 'vermelho') aviso.classList.add('bg-red-400/20', 'text-red-400', 'border-red-400');
+            else aviso.classList.add('bg-verdeNeon/20', 'text-verdeNeon', 'border-verdeNeon');
+        }
+        function esconderAviso() {
+            document.getElementById('aviso').classList.add('esconder');
+        }
+    </script>
+</body>
+</html>
